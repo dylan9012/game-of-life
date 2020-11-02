@@ -1,4 +1,4 @@
-package com.k20001430.tick1;
+package com.dylantjb.tick1;
 
 public class TestBit {
     public static void main(String[] args) throws Exception {

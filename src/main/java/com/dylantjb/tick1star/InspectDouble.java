@@ -1,4 +1,4 @@
-package com.k20001430.tick1star;
+package com.dylantjb.tick1star;
 
 public class InspectDouble {
     public static void main(String[] args) throws Exception {

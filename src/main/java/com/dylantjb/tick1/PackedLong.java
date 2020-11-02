@@ -1,4 +1,4 @@
-package com.k20001430.tick1;
+package com.dylantjb.tick1;
 
 public class PackedLong {
     /*
