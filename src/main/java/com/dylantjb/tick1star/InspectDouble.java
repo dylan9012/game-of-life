@@ -2,7 +2,7 @@ package com.dylantjb.tick1star;
 
 public class InspectDouble {
     public static void main(String[] args) throws Exception {
-        double d = Double.parseDouble("100.0");
+        double d = Double.parseDouble(args[0]);
         // return the bits which represent the floating point number
         long bits = Double.doubleToLongBits(d);
 
