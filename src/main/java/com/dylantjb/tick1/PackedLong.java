@@ -8,7 +8,7 @@ public class PackedLong {
      */
     public static boolean get(long packed, int position) {
         // set "check" to equal 1 if the "position" bit in "packed" is set to 1
-        packed >>= 4;
+        packed >>= position;
         int check = (packed > 1) ? 1 : 0;
         return (check == 1);
     }
