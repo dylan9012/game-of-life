@@ -1,4 +1,4 @@
-package com.dylantjb.tick1;
+package com.dylantjb.tick2star;
 
 public class PackedLong {
     /*
