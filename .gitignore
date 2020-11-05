@@ -1,3 +1,4 @@
 /game-of-life.iml
 /target/
 /.idea/
+*.DS_Store

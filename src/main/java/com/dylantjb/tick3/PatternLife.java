@@ -62,13 +62,15 @@ public class PatternLife {
         return nextCell;
     }
 
-    public static void nextGeneration(boolean[][] world) {
+    public static boolean[][] nextGeneration(boolean[][] world) {
+        boolean[][] nextWorld = new boolean[world.length][world[0].length];
         for (int row = 0; row < world.length; row++) {
             for (int col = 0; col < world[row].length; col++) {
                 boolean state = computeCell(world, col, row);
-                setCell(world, col, row, state);
+                setCell(nextWorld, col, row, state);
             }
         }
+        return nextWorld;
     }
 
     public static void play(boolean[][] world) throws Exception {
@@ -76,12 +78,12 @@ public class PatternLife {
         while (userResponse != 'q') {
             print(world);
             userResponse = System.in.read();
-            nextGeneration(world);
+            world = nextGeneration(world);
         }
     }
 
     public static void main(String[] args) throws Exception {
-        Pattern p = new Pattern(args[0]);
+        Pattern p = new Pattern("Glider:Richard Guy (1970):20:20:1:1:010 001 111");
         boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
         p.initialise(world);
         play(world);
