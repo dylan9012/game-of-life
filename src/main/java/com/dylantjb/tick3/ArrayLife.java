@@ -1,33 +1,31 @@
-package com.dylantjb.tick2;
+package com.dylantjb.tick3;
 
-public class TinyLife {
-    public static boolean getCell(long world, int col, int row) {
-        if (col < 0 || col > 7 || row < 0 || row > 7) {
-            return false;
-        }
-        int pos = 8 * row + col;
-        return PackedLong.get(world, pos);
+
+public class ArrayLife {
+    public static boolean getCell(boolean[][] world, int col, int row) {
+        if (row < 0 || row > world.length - 1) return false;
+        if (col < 0 || col > world[row].length - 1) return false;
+
+        return world[row][col];
     }
 
-    public static long setCell(long world, int col, int row, boolean value) {
+    public static void setCell(boolean[][] world, int col, int row, boolean value) {
         if (getCell(world, col, row) != value) {
-            int pos = 8 * row + col;
-            return PackedLong.set(world, pos, value);
+            world[row][col] = value;
         }
-        return world;
     }
 
-    public static void print(long world) {
+    public static void print(boolean[][] world) {
         System.out.println("-");
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < world.length; row++) {
+            for (int col = 0; col < world[row].length; col++) {
                 System.out.print(getCell(world, col, row) ? "#" : "_");
             }
             System.out.println();
         }
     }
 
-    public static int countNeighbours(long world, int col, int row) {
+    public static int countNeighbours(boolean[][] world, int col, int row) {
         int neighbours = 0;
         for (int hor = -1; hor < 2; hor++) {
             for (int ver = -1; ver < 2; ver++) {
@@ -43,7 +41,7 @@ public class TinyLife {
 
     }
 
-    public static boolean computeCell(long world, int col, int row) {
+    public static boolean computeCell(boolean[][] world, int col, int row) {
         // liveCell is true if the cell at position (col,row) in world is live
         boolean liveCell = getCell(world, col, row);
 
@@ -65,27 +63,35 @@ public class TinyLife {
         return nextCell;
     }
 
-    public static long nextGeneration(long world) {
-        long nextWorld = 0;
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+    public static void nextGeneration(boolean[][] world) {
+        for (int row = 0; row < world.length; row++) {
+            for (int col = 0; col < world[row].length; col++) {
                 boolean state = computeCell(world, col, row);
-                nextWorld = setCell(nextWorld, col, row, state);
+                setCell(world, col, row, state);
             }
         }
-        return nextWorld;
     }
 
-    public static void play(long world) throws Exception {
+    public static void play(boolean[][] world) throws Exception {
         int userResponse = 0;
         while (userResponse != 'q') {
             print(world);
             userResponse = System.in.read();
-            world = nextGeneration(world);
+            nextGeneration(world);
         }
     }
 
     public static void main(String[] args) throws Exception {
-        play(Long.decode(args[0]));
+        int size = Integer.parseInt(args[0]);
+        long initial = Long.decode(args[1]);
+        boolean[][] world = new boolean[size][size];
+        //place the long representation of the game board in the centre of "world"
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                world[i + size / 2 - 4][j + size / 2 - 4] = PackedLong.get(initial, i * 8 + j);
+            }
+        }
+
+        play(world);
     }
 }

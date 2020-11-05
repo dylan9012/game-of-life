@@ -1,0 +1,22 @@
+1.  com.dylantjb.tick3.FibonacciCache
+
+2.  com.dylantjb.tick3.ReferenceTest
+
+3.  The first line accesses arrays k -> i and prints index 1 of i (0), then increments its value.
+    The second line first increments the value, then accesses arrays k -> j -> i and prints the same index 1 of i (2).
+    The third line accesses array i and prints the same index 1 of i (2).
+    The fourth line first decrements the value, then accesses arrays j -> i and prints the same index 1 of i (1).
+
+4.  com.dylantjb.tick3.ArrayLife
+
+5.  com.dylantjb.tick3.StringArrayLife
+
+6.  com.dylantjb.tick3.StringArrayLife
+
+7.  java com.dylantjb.tick3.StringArrayLife "Glider:Richard Guy (1970):20:20:1:1:010 001 111" =>  The Glider in a 20-by-20 world
+
+8.  com.dylantjb.tick3.Pattern
+
+9.  com.dylantjb.tick3.PatternLife
+
+10. java com.dylantjb.tick3.PatternLife "Glider:Richard Guy (1970):20:20:1:1:010 001 111" =>  The Glider in a 20-by-20 world

@@ -33,10 +33,11 @@ public class LoopingLife {
         int neighbours = 0;
         for (int hor = -1; hor < 2; hor++) {
             for (int ver = -1; ver < 2; ver++) {
-                if (hor != 0 || ver != 0) {
-                    if (getCell(world, col + hor, row + ver)) {
-                        neighbours++;
-                    }
+                if (hor == 0 && ver == 0) {
+                    continue;
+                }
+                if (getCell(world, col + hor, row + ver)) {
+                    neighbours++;
                 }
             }
         }
@@ -80,11 +81,11 @@ public class LoopingLife {
     public static void findLoop(long world) throws Exception {
         long[] worlds = new long[100];
         evolution:
-        for (int gen=0; gen<100; gen++) {
+        for (int gen = 0; gen < 100; gen++) {
             world = nextGeneration(world);
-            for (int preGen = 0; preGen<worlds.length-1; preGen++) {
+            for (int preGen = 0; preGen < worlds.length - 1; preGen++) {
                 if (world == worlds[preGen]) {
-                    System.out.println(preGen + " to " + (gen-1));
+                    System.out.println(preGen + " to " + (gen - 1));
                     break evolution;
                 }
             }
