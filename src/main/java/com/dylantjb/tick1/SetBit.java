@@ -1,7 +1,7 @@
 package com.dylantjb.tick1;
 
 public class SetBit {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         long currentValue = Long.decode(args[0]);
         int position = Integer.parseInt(args[1]);
         boolean value = Boolean.parseBoolean(args[2]);

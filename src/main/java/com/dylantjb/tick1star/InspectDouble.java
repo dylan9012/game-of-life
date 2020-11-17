@@ -1,7 +1,7 @@
 package com.dylantjb.tick1star;
 
 public class InspectDouble {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         double d = Double.parseDouble(args[0]);
         // return the bits which represent the floating point number
         long bits = Double.doubleToLongBits(d);
@@ -27,14 +27,14 @@ public class InspectDouble {
         System.out.println((negative ? "-" : "") + mantissa + " x 2^" + exponent);
     }
 
-    private static double mantissaToDecimal(long mantissaBits) {
-        long one = 0x0010000000000000L;
-        return (double) (mantissaBits + one) / (double) one;
-    }
-
     private static int exponentToDecimal(long exponentBits) {
         long one = 0x0010000000000000L;
         return (int) ((double) exponentBits / (double) one - 1023);
+    }
+
+    private static double mantissaToDecimal(long mantissaBits) {
+        long one = 0x0010000000000000L;
+        return (double) (mantissaBits + one) / (double) one;
     }
 }
 

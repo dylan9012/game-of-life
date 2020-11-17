@@ -36,7 +36,6 @@ public class Pattern {
         return height;
     }
 
-
     public int getStartCol() {
         return startCol;
     }

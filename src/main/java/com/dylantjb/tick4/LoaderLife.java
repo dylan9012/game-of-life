@@ -1,19 +1,49 @@
-package com.dylantjb.tick3;
+package com.dylantjb.tick4;
 
+import java.io.IOException;
+import java.util.List;
 
-public class ArrayLife {
-    public static void main(String[] args) throws Exception {
-        int size = Integer.parseInt(args[0]);
-        long initial = Long.decode(args[1]);
-        boolean[][] world = new boolean[size][size];
-        //place the long representation of the game board in the centre of "world"
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                world[i + size / 2 - 4][j + size / 2 - 4] = PackedLong.get(initial, i * 8 + j);
+public class LoaderLife {
+    public static void main(String[] args) {
+        try {
+            List<Pattern> patterns;
+            String source = args[0];
+            if (source.startsWith("http://") || source.startsWith("https://")) {
+                patterns = PatternLoader.loadFromURL(source);
+            } else {
+                patterns = PatternLoader.loadFromDisk(source);
             }
-        }
 
-        play(world);
+            if (args.length > 1) {
+                int index = Integer.parseInt(args[1]);
+
+                Pattern p = null;
+                for (Pattern pattern : patterns) {
+                    if (pattern.getIndex() == index) {
+                        p = pattern;
+                    }
+                }
+                if (p == null) {
+                    throw new Exception();
+                }
+                boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
+                p.initialise(world);
+                play(world);
+
+            } else {
+                for (Pattern p : patterns) {
+                    System.out.println(p.getIndex() + ")" + " " + p.getName() + ":" + p.getAuthor() + ":" + p.getWidth()
+                            + ":" + p.getHeight() + ":" + p.getStartCol() + ":" + p.getStartRow() + ":" + p.getCells());
+                }
+            }
+
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("No file or url inputted");
+        } catch (IOException e) {
+            System.out.println("Invalid file or url");
+        } catch (Exception e) {
+            System.out.println("Chosen pattern is invalid");
+        }
     }
 
     public static void play(boolean[][] world) throws Exception {
@@ -97,3 +127,4 @@ public class ArrayLife {
 
     }
 }
+

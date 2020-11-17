@@ -1,16 +1,19 @@
 package com.dylantjb.tick3;
 
 public class PatternLife {
-    public static boolean getCell(boolean[][] world, int col, int row) {
-        if (row < 0 || row > world.length - 1) return false;
-        if (col < 0 || col > world[row].length - 1) return false;
-
-        return world[row][col];
+    public static void main(String[] args) throws Exception {
+        Pattern p = new Pattern(args[0]);
+        boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
+        p.initialise(world);
+        play(world);
     }
 
-    public static void setCell(boolean[][] world, int col, int row, boolean value) {
-        if (getCell(world, col, row) != value) {
-            world[row][col] = value;
+    public static void play(boolean[][] world) throws Exception {
+        int userResponse = 0;
+        while (userResponse != 'q') {
+            print(world);
+            userResponse = System.in.read();
+            world = nextGeneration(world);
         }
     }
 
@@ -24,20 +27,22 @@ public class PatternLife {
         }
     }
 
-    public static int countNeighbours(boolean[][] world, int col, int row) {
-        int neighbours = 0;
-        for (int hor = -1; hor < 2; hor++) {
-            for (int ver = -1; ver < 2; ver++) {
-                if (hor == 0 && ver == 0) {
-                    continue;
-                }
-                if (getCell(world, col + hor, row + ver)) {
-                    neighbours++;
-                }
+    public static boolean[][] nextGeneration(boolean[][] world) {
+        boolean[][] nextWorld = new boolean[world.length][world[0].length];
+        for (int row = 0; row < world.length; row++) {
+            for (int col = 0; col < world[row].length; col++) {
+                boolean state = computeCell(world, col, row);
+                setCell(nextWorld, col, row, state);
             }
         }
-        return neighbours;
+        return nextWorld;
+    }
 
+    public static boolean getCell(boolean[][] world, int col, int row) {
+        if (row < 0 || row > world.length - 1) return false;
+        if (col < 0 || col > world[row].length - 1) return false;
+
+        return world[row][col];
     }
 
     public static boolean computeCell(boolean[][] world, int col, int row) {
@@ -62,31 +67,26 @@ public class PatternLife {
         return nextCell;
     }
 
-    public static boolean[][] nextGeneration(boolean[][] world) {
-        boolean[][] nextWorld = new boolean[world.length][world[0].length];
-        for (int row = 0; row < world.length; row++) {
-            for (int col = 0; col < world[row].length; col++) {
-                boolean state = computeCell(world, col, row);
-                setCell(nextWorld, col, row, state);
+    public static void setCell(boolean[][] world, int col, int row, boolean value) {
+        if (getCell(world, col, row) != value) {
+            world[row][col] = value;
+        }
+    }
+
+    public static int countNeighbours(boolean[][] world, int col, int row) {
+        int neighbours = 0;
+        for (int hor = -1; hor < 2; hor++) {
+            for (int ver = -1; ver < 2; ver++) {
+                if (hor == 0 && ver == 0) {
+                    continue;
+                }
+                if (getCell(world, col + hor, row + ver)) {
+                    neighbours++;
+                }
             }
         }
-        return nextWorld;
-    }
+        return neighbours;
 
-    public static void play(boolean[][] world) throws Exception {
-        int userResponse = 0;
-        while (userResponse != 'q') {
-            print(world);
-            userResponse = System.in.read();
-            world = nextGeneration(world);
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-        Pattern p = new Pattern("Glider:Richard Guy (1970):20:20:1:1:010 001 111");
-        boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
-        p.initialise(world);
-        play(world);
     }
 }
 

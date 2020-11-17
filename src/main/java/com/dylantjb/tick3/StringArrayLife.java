@@ -2,16 +2,33 @@ package com.dylantjb.tick3;
 
 
 public class StringArrayLife {
-    public static boolean getCell(boolean[][] world, int col, int row) {
-        if (row < 0 || row > world.length - 1) return false;
-        if (col < 0 || col > world[row].length - 1) return false;
+    public static void main(String[] args) throws Exception {
+        String formatString = args[0];
+        String[] details = formatString.split(":");
+        int width = Integer.parseInt(details[2]);
+        int height = Integer.parseInt(details[3]);
+        boolean[][] world = new boolean[width][height];
+        int startCol = Integer.parseInt(details[4]);
+        int startRow = Integer.parseInt(details[5]);
+        String cells = details[6];
+        String[] bits = cells.split(" ");
 
-        return world[row][col];
+        for (int row = 0; row < bits.length; row++) {
+            char[] line = bits[row].toCharArray();
+            for (int col = 0; col < line.length; col++) {
+                world[startRow + row][startCol + col] = line[col] == '1';
+            }
+        }
+
+        play(world);
     }
 
-    public static void setCell(boolean[][] world, int col, int row, boolean value) {
-        if (getCell(world, col, row) != value) {
-            world[row][col] = value;
+    public static void play(boolean[][] world) throws Exception {
+        int userResponse = 0;
+        while (userResponse != 'q') {
+            print(world);
+            userResponse = System.in.read();
+            world = nextGeneration(world);
         }
     }
 
@@ -25,20 +42,22 @@ public class StringArrayLife {
         }
     }
 
-    public static int countNeighbours(boolean[][] world, int col, int row) {
-        int neighbours = 0;
-        for (int hor = -1; hor < 2; hor++) {
-            for (int ver = -1; ver < 2; ver++) {
-                if (hor == 0 && ver == 0) {
-                    continue;
-                }
-                if (getCell(world, col + hor, row + ver)) {
-                    neighbours++;
-                }
+    public static boolean[][] nextGeneration(boolean[][] world) {
+        boolean[][] nextWorld = new boolean[world.length][world[0].length];
+        for (int row = 0; row < world.length; row++) {
+            for (int col = 0; col < world[row].length; col++) {
+                boolean state = computeCell(world, col, row);
+                setCell(nextWorld, col, row, state);
             }
         }
-        return neighbours;
+        return nextWorld;
+    }
 
+    public static boolean getCell(boolean[][] world, int col, int row) {
+        if (row < 0 || row > world.length - 1) return false;
+        if (col < 0 || col > world[row].length - 1) return false;
+
+        return world[row][col];
     }
 
     public static boolean computeCell(boolean[][] world, int col, int row) {
@@ -63,44 +82,25 @@ public class StringArrayLife {
         return nextCell;
     }
 
-    public static boolean[][] nextGeneration(boolean[][] world) {
-        boolean[][] nextWorld = new boolean[world.length][world[0].length];
-        for (int row = 0; row < world.length; row++) {
-            for (int col = 0; col < world[row].length; col++) {
-                boolean state = computeCell(world, col, row);
-                setCell(nextWorld, col, row, state);
-            }
-        }
-        return nextWorld;
-    }
-
-    public static void play(boolean[][] world) throws Exception {
-        int userResponse = 0;
-        while (userResponse != 'q') {
-            print(world);
-            userResponse = System.in.read();
-            world = nextGeneration(world);
+    public static void setCell(boolean[][] world, int col, int row, boolean value) {
+        if (getCell(world, col, row) != value) {
+            world[row][col] = value;
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        String formatString = args[0];
-        String[] details = formatString.split(":");
-        int width = Integer.parseInt(details[2]);
-        int height = Integer.parseInt(details[3]);
-        boolean[][] world = new boolean[width][height];
-        int startCol = Integer.parseInt(details[4]);
-        int startRow = Integer.parseInt(details[5]);
-        String cells = details[6];
-        String[] bits = cells.split(" ");
-
-        for (int row = 0; row < bits.length; row++) {
-            char[] line = bits[row].toCharArray();
-            for (int col = 0; col < line.length; col++) {
-                world[startRow + row][startCol + col] = line[col] == '1';
+    public static int countNeighbours(boolean[][] world, int col, int row) {
+        int neighbours = 0;
+        for (int hor = -1; hor < 2; hor++) {
+            for (int ver = -1; ver < 2; ver++) {
+                if (hor == 0 && ver == 0) {
+                    continue;
+                }
+                if (getCell(world, col + hor, row + ver)) {
+                    neighbours++;
+                }
             }
         }
+        return neighbours;
 
-        play(world);
     }
 }

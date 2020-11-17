@@ -5,28 +5,6 @@ import java.util.Arrays;
 public class FibonacciCache {
     public static long[] fib;
 
-    public static void store() {
-        for (int i = 0; i < fib.length; i++) {
-            if (i < 2) {
-                fib[i] = i;
-            } else {
-                fib[i] = fib[i - 1] + fib[i - 2];
-            }
-        }
-    }
-
-    public static void reset() {
-        Arrays.fill(fib, 0);
-    }
-
-    public static long get(int i) {
-        if (i < fib.length) {
-            return fib[i];
-        } else {
-            return -1L;
-        }
-    }
-
     public static void main(String[] args) {
         fib = new long[Integer.parseInt(args[0])];
 
@@ -46,6 +24,28 @@ public class FibonacciCache {
             System.out.println(i); // 0, 0, ..., 0
         }
         System.out.println(get(20)); // -1
+    }
+
+    public static void store() {
+        for (int i = 0; i < fib.length; i++) {
+            if (i < 2) {
+                fib[i] = i;
+            } else {
+                fib[i] = fib[i - 1] + fib[i - 2];
+            }
+        }
+    }
+
+    public static long get(int i) {
+        if (i < fib.length) {
+            return fib[i];
+        } else {
+            return -1L;
+        }
+    }
+
+    public static void reset() {
+        Arrays.fill(fib, 0);
     }
 
 }

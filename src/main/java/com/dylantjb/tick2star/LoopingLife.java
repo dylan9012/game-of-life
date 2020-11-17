@@ -1,24 +1,6 @@
 package com.dylantjb.tick2star;
 
-import com.dylantjb.tick2.PackedLong;
-
 public class LoopingLife {
-    public static boolean getCell(long world, int col, int row) {
-        if (col < 0 || col > 7 || row < 0 || row > 7) {
-            return false;
-        }
-        int pos = 8 * row + col;
-        return com.dylantjb.tick2.PackedLong.get(world, pos);
-    }
-
-    public static long setCell(long world, int col, int row, boolean value) {
-        if (getCell(world, col, row) != value) {
-            int pos = 8 * row + col;
-            return PackedLong.set(world, pos, value);
-        }
-        return world;
-    }
-
     public static void print(long world) {
         System.out.println("-");
         for (int row = 0; row < 8; row++) {
@@ -29,20 +11,42 @@ public class LoopingLife {
         }
     }
 
-    public static int countNeighbours(long world, int col, int row) {
-        int neighbours = 0;
-        for (int hor = -1; hor < 2; hor++) {
-            for (int ver = -1; ver < 2; ver++) {
-                if (hor == 0 && ver == 0) {
-                    continue;
-                }
-                if (getCell(world, col + hor, row + ver)) {
-                    neighbours++;
+    public static boolean getCell(long world, int col, int row) {
+        if (col < 0 || col > 7 || row < 0 || row > 7) {
+            return false;
+        }
+        int pos = 8 * row + col;
+        return com.dylantjb.tick2.PackedLong.get(world, pos);
+    }
+
+    public static void main(String[] args) {
+        findLoop(Long.decode(args[0]));
+    }
+
+    public static void findLoop(long world) {
+        long[] worlds = new long[100];
+        evolution:
+        for (int gen = 0; gen < 100; gen++) {
+            world = nextGeneration(world);
+            for (int preGen = 0; preGen < worlds.length - 1; preGen++) {
+                if (world == worlds[preGen]) {
+                    System.out.println(preGen + " to " + (gen - 1));
+                    break evolution;
                 }
             }
+            worlds[gen] = world;
         }
-        return neighbours;
+    }
 
+    public static long nextGeneration(long world) {
+        long nextWorld = 0;
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                boolean state = computeCell(world, col, row);
+                nextWorld = setCell(nextWorld, col, row, state);
+            }
+        }
+        return nextWorld;
     }
 
     public static boolean computeCell(long world, int col, int row) {
@@ -67,33 +71,27 @@ public class LoopingLife {
         return nextCell;
     }
 
-    public static long nextGeneration(long world) {
-        long nextWorld = 0;
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                boolean state = computeCell(world, col, row);
-                nextWorld = setCell(nextWorld, col, row, state);
-            }
+    public static long setCell(long world, int col, int row, boolean value) {
+        if (getCell(world, col, row) != value) {
+            int pos = 8 * row + col;
+            return PackedLong.set(world, pos, value);
         }
-        return nextWorld;
+        return world;
     }
 
-    public static void findLoop(long world) throws Exception {
-        long[] worlds = new long[100];
-        evolution:
-        for (int gen = 0; gen < 100; gen++) {
-            world = nextGeneration(world);
-            for (int preGen = 0; preGen < worlds.length - 1; preGen++) {
-                if (world == worlds[preGen]) {
-                    System.out.println(preGen + " to " + (gen - 1));
-                    break evolution;
+    public static int countNeighbours(long world, int col, int row) {
+        int neighbours = 0;
+        for (int hor = -1; hor < 2; hor++) {
+            for (int ver = -1; ver < 2; ver++) {
+                if (hor == 0 && ver == 0) {
+                    continue;
+                }
+                if (getCell(world, col + hor, row + ver)) {
+                    neighbours++;
                 }
             }
-            worlds[gen] = world;
         }
-    }
+        return neighbours;
 
-    public static void main(String[] args) throws Exception {
-        findLoop(Long.decode(args[0]));
     }
 }

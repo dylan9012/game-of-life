@@ -1,0 +1,14 @@
+1.  com.dylantjb.tick4.Repeat
+
+2.  CST1A
+
+3.  com.dylantjb.tick4.Pattern
+    com.dylantjb.tick4.PatternLife
+
+4.  com.dylantjb.tick4.PatternFormatException
+
+5.  com.dylantjb.tick4.Pattern
+
+6.  com.dylantjb.tick4.PatternLife
+
+7.

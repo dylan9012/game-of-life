@@ -1,33 +1,34 @@
 package com.dylantjb.tick3star;
 
 public class AnimatedLife {
-    public static boolean getCell(boolean[][] world, int col, int row) {
-        if (row < 0 || row > world.length - 1) return false;
-        if (col < 0 || col > world[row].length - 1) return false;
+    public static void main(String[] args) throws Exception {
+        Pattern p = new Pattern(args[0]);
+        int generations = Integer.parseInt(args[1]);
+        String filename = System.getProperty("user.dir") + "/src/main/java/com/dylantjb/tick3star/" + args[2];
 
-        return world[row][col];
-    }
+        OutputAnimatedGif animation = new OutputAnimatedGif(filename);
 
-    public static void setCell(boolean[][] world, int col, int row, boolean value) {
-        if (getCell(world, col, row) != value) {
-            world[row][col] = value;
+        boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
+        p.initialise(world);
+        animation.addFrame(world);
+
+        for (int i = 0; i < generations - 1; i++) {
+            world = nextGeneration(world);
+            animation.addFrame(world);
         }
+
+        animation.close();
     }
 
-    public static int countNeighbours(boolean[][] world, int col, int row) {
-        int neighbours = 0;
-        for (int hor = -1; hor < 2; hor++) {
-            for (int ver = -1; ver < 2; ver++) {
-                if (hor == 0 && ver == 0) {
-                    continue;
-                }
-                if (getCell(world, col + hor, row + ver)) {
-                    neighbours++;
-                }
+    public static boolean[][] nextGeneration(boolean[][] world) {
+        boolean[][] nextWorld = new boolean[world.length][world[0].length];
+        for (int row = 0; row < world.length; row++) {
+            for (int col = 0; col < world[row].length; col++) {
+                boolean state = computeCell(world, col, row);
+                setCell(nextWorld, col, row, state);
             }
         }
-        return neighbours;
-
+        return nextWorld;
     }
 
     public static boolean computeCell(boolean[][] world, int col, int row) {
@@ -52,34 +53,32 @@ public class AnimatedLife {
         return nextCell;
     }
 
-    public static boolean[][] nextGeneration(boolean[][] world) {
-        boolean[][] nextWorld = new boolean[world.length][world[0].length];
-        for (int row = 0; row < world.length; row++) {
-            for (int col = 0; col < world[row].length; col++) {
-                boolean state = computeCell(world, col, row);
-                setCell(nextWorld, col, row, state);
-            }
+    public static void setCell(boolean[][] world, int col, int row, boolean value) {
+        if (getCell(world, col, row) != value) {
+            world[row][col] = value;
         }
-        return nextWorld;
     }
 
+    public static boolean getCell(boolean[][] world, int col, int row) {
+        if (row < 0 || row > world.length - 1) return false;
+        if (col < 0 || col > world[row].length - 1) return false;
 
-    public static void main(String[] args) throws Exception {
-        Pattern p = new Pattern(args[0]);
-        int generations = Integer.parseInt(args[1]);
-        String filename = System.getProperty("user.dir") + "/src/main/java/com/dylantjb/tick3star/" + args[2];
+        return world[row][col];
+    }
 
-        OutputAnimatedGif animation = new OutputAnimatedGif(filename);
-
-        boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
-        p.initialise(world);
-        animation.addFrame(world);
-
-        for (int i = 0; i < generations - 1; i++) {
-            world = nextGeneration(world);
-            animation.addFrame(world);
+    public static int countNeighbours(boolean[][] world, int col, int row) {
+        int neighbours = 0;
+        for (int hor = -1; hor < 2; hor++) {
+            for (int ver = -1; ver < 2; ver++) {
+                if (hor == 0 && ver == 0) {
+                    continue;
+                }
+                if (getCell(world, col + hor, row + ver)) {
+                    neighbours++;
+                }
+            }
         }
+        return neighbours;
 
-        animation.close();
     }
 }

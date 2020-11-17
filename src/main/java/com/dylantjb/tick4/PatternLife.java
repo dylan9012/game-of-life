@@ -1,19 +1,17 @@
-package com.dylantjb.tick3;
+package com.dylantjb.tick4;
 
-
-public class ArrayLife {
+public class PatternLife {
     public static void main(String[] args) throws Exception {
-        int size = Integer.parseInt(args[0]);
-        long initial = Long.decode(args[1]);
-        boolean[][] world = new boolean[size][size];
-        //place the long representation of the game board in the centre of "world"
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                world[i + size / 2 - 4][j + size / 2 - 4] = PackedLong.get(initial, i * 8 + j);
-            }
+        try {
+            Pattern p = new Pattern(args[0]);
+            boolean[][] world = new boolean[p.getHeight()][p.getWidth()];
+            p.initialise(world);
+            play(world);
+        } catch (PatternFormatException e) {
+            System.out.println(e.getMessage());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("No pattern inputted");
         }
-
-        play(world);
     }
 
     public static void play(boolean[][] world) throws Exception {
@@ -97,3 +95,4 @@ public class ArrayLife {
 
     }
 }
+
